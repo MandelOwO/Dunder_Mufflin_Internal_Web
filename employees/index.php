@@ -13,13 +13,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="../styles/style.css">
 
 
 </head>
 
 <body>
-<?php require '../source/db.php' ?>
+    <?php require '../source/db.php' ?>
 
 
     <!-- NAVBAR -->
@@ -53,9 +53,17 @@
     <main class="Container mt-5">
 
         <div class="container">
-            <div class="row">
-                <div class="col">
-
+            <div class="row row-cols-1 row-cols-md-2 ">
+                <div class="col mt-2">
+                    <a type="button" class="btn btn-dark" href="edit.php">Add</a>
+                    <a type="button" class="btn btn-dark" href="edit.php">Edit selected</a>
+                    <a type="button" class="btn btn-dark" href="edit.php">Delete selected</a>
+                </div>
+                <div class="col ">
+                    <form class="d-flex justify-content-md-end mt-2">
+                        <input type="text">
+                        <button type="button" class="btn btn-dark ms-2" href="edit.php" ><i class="bi bi-search "></i></button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -69,7 +77,7 @@
         $employees = $stmt->fetchAll();
         ?>
 
-        <div class="table-responsive">
+        <div class="table-responsive mt-3">
             <table class="table table-hover">
                 <thead class="table-dark">
                     <tr>
@@ -83,8 +91,8 @@
                     <?php foreach ($employees as $empKey => $employee) : ?>
                         <tr>
                             <th scope="row">
-                                <input type="checkbox" name="" id="">
-                                1
+                                <input type="checkbox" name="IdEmployee" id="<?= $empKey + 1 ?>">
+                                <a href="edit.php?id=<?= $empKey + 1 ?>"> 1 </a>
                             </th>
                             <td><?= $employee['Name'] ?></td>
                             <td><?= $employee['Surname'] ?></td>
