@@ -1,0 +1,21 @@
+<button onclick="topFunction()" id="TopBtn" title="Go to top" type="button" class="btn btn-dark"><i class="bi bi-arrow-up"></i></button>
+<script>
+    var mybutton = document.getElementById("TopBtn");
+
+    window.onscroll = function() {
+        scrollFunction()
+    };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
