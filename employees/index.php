@@ -61,8 +61,10 @@
                 </div>
                 <div class="col ">
                     <form class="d-flex justify-content-md-end mt-2">
-                        <input type="text">
-                        <button type="button" class="btn btn-dark ms-2" href="edit.php" ><i class="bi bi-search "></i></button>
+                        <div class="input-group">
+                            <input type="text" class="form-control" aria-describedby="Search">
+                        </div>
+                        <button type="submit" class="btn btn-dark ms-2"><i class="bi bi-search "></i></button>
                     </form>
                 </div>
             </div>
@@ -105,16 +107,16 @@
 
         </div>
 
-        <!-- Go to top btn -->
-        <div id="ToTopBtn"></div>
-        <script>
-            $(function() {
-                $("#ToTopBtn").load("source/ToTopBtn.html");
-            });
-        </script>
+
     </main>
 
-
+    <!-- Go to top btn -->
+    <div id="ToTopBtn"></div>
+    <script>
+        $(function() {
+            $("#ToTopBtn").load("source/ToTopBtn.html");
+        });
+    </script>
 
 
 </body>
