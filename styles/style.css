@@ -22,6 +22,14 @@
 
 /*RANDOM STYLES*/
 
-th a {
+td a {
     color: black;
+}
+
+.table-tools {
+    width: 100px;
+}
+
+tbody td>div {
+    margin-top: 0.3rem;
 }

@@ -51,73 +51,127 @@
 
 
     <main class="Container mt-5">
+        <form action="" method="POST">
 
-        <div class="container">
-            <div class="row row-cols-1 row-cols-md-2 ">
-                <div class="col mt-2">
+            <div class="d-flex justify-content-between">
+                <div class="">
+
                     <a type="button" class="btn btn-dark" href="edit.php">Add</a>
-                    <a type="button" class="btn btn-dark" href="edit.php">Edit selected</a>
-                    <a type="button" class="btn btn-dark" href="edit.php">Delete selected</a>
+                    <!-- 
+                        <a type="button" class="btn btn-dark" href="edit.php">Edit selected</a>
+                        <input type="submit" class="button btn btn-dark" name="del" value="Delete selected">
+                         -->
                 </div>
-                <div class="col ">
-                    <form class="d-flex justify-content-md-end mt-2">
-                        <div class="input-group">
+                <div class="d-flex justify-content-end">
+                    <form class="mt-2 ">
+                        <div class="d-flex justify-content-end">
                             <input type="text" class="form-control" aria-describedby="Search">
+                            <button type="submit" class="btn btn-dark ms-2"><i class="bi bi-search "></i></button>
                         </div>
-                        <button type="submit" class="btn btn-dark ms-2"><i class="bi bi-search "></i></button>
+
                     </form>
                 </div>
             </div>
-        </div>
 
-        <!-- TABLE -->
 
-        <?php
-        $stmt = $pdo->prepare('SELECT * FROM TbEmployees');
-        $stmt->execute();
+            <!-- TABLE -->
 
-        $employees = $stmt->fetchAll();
-        ?>
+            <?php
+            $stmt = $pdo->prepare('SELECT * FROM TbEmployees');
+            $stmt->execute();
 
-        <div class="table-responsive mt-3">
-            <table class="table table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Job</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($employees as $empKey => $employee) : ?>
+            $employees = $stmt->fetchAll();
+            ?>
+
+            <div class="table-responsive mt-3">
+                <table class="table table-hover">
+                    <thead class="table-dark">
                         <tr>
-                            <th scope="row">
-                                <input type="checkbox" name="IdEmployee" id="<?= $empKey + 1 ?>">
-                                <a href="edit.php?id=<?= $empKey + 1 ?>"> 1 </a>
-                            </th>
-                            <td><?= $employee['Name'] ?></td>
-                            <td><?= $employee['Surname'] ?></td>
-                            <td><?= $employee['Job'] ?></td>
+                            <th scope="col">ID</th>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Job</th>
+                            <th scope="col">Actions</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($employees as $empKey => $employee) : ?>
+                            <tr>
+                                <td scope="row">
+                                    <div>
+                                        <?= $employee['IdEmployee'] ?>
+                                    </div>
+                                    <!-- 
+                                    <label for="id[]">
+                                        <input type="checkbox" name="id[]" value="<?= $employee['IdEmployee'] ?>">
+                                        <?= $employee['IdEmployee'] ?>
+                                    </label>
+                                     -->
+                                </td>
+                                <td>
+                                    <div><a href="edit.php?id=<?= $employee['IdEmployee'] ?>"> <?= $employee['Name'] ?> </a> </div>
+                                </td>
+                                <td>
+                                    <div><?= $employee['Surname'] ?></div>
+                                </td>
+                                <td>
+                                    <div><?= $employee['Job'] ?></div>
+                                </td>
+                                <th class="table-tools">
+                                    <div class="input-group ">
+                                        <button class="btn btn-outline-secondary" type="button"><i class="bi bi-trash-fill"></i></button>
+                                        <button class="btn btn-outline-secondary" type="button"><i class="bi bi-wrench"></i></button>
+                                    </div>
+                                </th>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
 
-            </table>
+                </table>
 
-        </div>
+            </div>
 
+            <!-- 
+            <?php
+            print_r($_POST);
+            if (isset($_POST['del'])) {
+                var_dump($_POST['id']);
+                //  echo("<script>location.href = 'index.php?='".$_POST['id'].";</script>");
+            }
+            ?>
+        -->
 
+        </form>
     </main>
 
     <!-- Go to top btn -->
     <div id="ToTopBtn"></div>
     <script>
         $(function() {
-            $("#ToTopBtn").load("source/ToTopBtn.html");
+            $("#ToTopBtn").load("../source/ToTopBtn.html");
         });
     </script>
 
+
+
+    <!-- 
+    <script>
+        $(document).ready(function() {
+            $('.button').click(function() {
+                var clickBtnValue = $(this).val();
+                var ajaxurl = '../js/ajax.php',
+                    data = {
+                        'action': clickBtnValue
+                    };
+                $.post(ajaxurl, data, function(response) {
+                    // Response div goes here.
+
+                    alert("action performed successfully");
+                });
+            });
+        });
+    </script>
+ -->
 
 </body>
 
