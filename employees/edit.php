@@ -21,6 +21,15 @@
 <body>
     <?php require '../source/db.php' ?>
 
+    <?php
+    if (isset($_GET['id'])) {
+        $stmt = $pdo->prepare('SELECT * FROM TbEmployees WHERE IdEmployee = :id');
+        $stmt->execute(['id' => $_GET['id']]);
+
+        $row = $stmt->fetch();
+    }
+    ?>
+
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar example">
@@ -67,21 +76,21 @@
                 <div class="row">
                     <div class="input-group mb-3">
                         <span class="input-group-text">First and last name</span>
-                        <input type="text" aria-label="First name" class="form-control" name="Name">
-                        <input type="text" aria-label="Last name" class="form-control" name="Surname">
+                        <input type="text" aria-label="First name" class="form-control" name="Name" value="<?php echo isset($_GET['id']) ? $row['Name'] : '' ?>" required>
+                        <input type="text" aria-label="Last name" class="form-control" name="Surname" value="<?php echo isset($_GET['id']) ? $row['Surname'] : '' ?>" required>
                     </div>
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">E-Mail</span>
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="Mail">
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="Mail" value="<?php echo isset($_GET['id']) ? $row['Mail'] : '' ?>" required>
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Birth Date</span>
-                    <input type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="BirthDate">
+                    <input type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="BirthDate" value="<?php echo isset($_GET['id']) ? $row['BirthDate'] : '' ?>">
                 </div>
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="inputGroup-sizing-default">Job</span>
-                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="Job">
+                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="Job" value="<?php echo isset($_GET['id']) ? $row['Job'] : '' ?>" required>
                 </div>
             </div>
         </form>
@@ -91,17 +100,31 @@
 
     if (isset($_POST) && !empty($_POST)) {
 
-        $stmt = $pdo->prepare("INSERT INTO TbEmployees (Name, Surname, Mail, BirthDate, Job)
-                                                            VALUES (:Name, :Surname, :Mail, :BirthDate, :Job)");
-        $stmt->execute([
-            'Name' => $_POST['Name'],
-            'Surname' => $_POST['Surname'],
-            'BirthDate' => $_POST['BirthDate'],
-            'Mail' => $_POST['Mail'],
-            'Job' => $_POST['Job']
-        ]);
+        if (isset($_GET['id'])) {
+            $stmt = $pdo->prepare("UPDATE TbEmployees SET  Name = :Name, Surname = :Surname, Mail = :Mail, BirthDate = :BirthDate, Job = :Job WHERE IdEmployee = :id");
+            $stmt->execute([
+                'Name' => $_POST['Name'],
+                'Surname' => $_POST['Surname'],
+                'BirthDate' => $_POST['BirthDate'],
+                'Mail' => $_POST['Mail'],
+                'Job' => $_POST['Job'],
+                'id' => $_GET['id']
+            ]);
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO TbEmployees (Name, Surname, Mail, BirthDate, Job)
+            VALUES (:Name, :Surname, :Mail, :BirthDate, :Job)");
+            $stmt->execute([
+                'Name' => $_POST['Name'],
+                'Surname' => $_POST['Surname'],
+                'BirthDate' => $_POST['BirthDate'],
+                'Mail' => $_POST['Mail'],
+                'Job' => $_POST['Job']
+            ]);
+        }
 
-        echo("<script>location.href = 'index.php';</script>");
+
+
+        echo ("<script>location.href = 'index.php';</script>");
     }
     ?>
 
