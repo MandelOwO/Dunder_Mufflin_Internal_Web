@@ -73,13 +73,13 @@
         <div class="d-flex justify-content-between">
             <div class="">
                 <a type="button" class="btn btn-dark" href="edit.php">Add</a>
-                <!--
+                        <!--
                         <a type="button" class="btn btn-dark" href="edit.php">Edit selected</a>
                         <input type="submit" class="button btn btn-dark" name="del" value="Delete selected">
                          -->
             </div>
             <div class="d-flex justify-content-end">
-                <form class=" ">
+                <form class="" method="GET">
                     <div class="d-flex justify-content-end">
                         <input type="text" class="form-control" aria-describedby="Search" name="search">
                         <button type="submit" class="btn btn-dark ms-2"><i class="bi bi-search "></i></button>
@@ -91,12 +91,9 @@
 
 
         <!-- TABLE -->
-        <?php
-
-        ?>
 
         <div class="table-responsive mt-3">
-            <table class="table table-hover">
+            <table class="table ">
                 <thead class="table-dark">
                     <tr>
                         <th scope="col">ID</th>
@@ -109,7 +106,7 @@
                 <tbody>
                     <?php foreach ($employees as $empKey => $employee) : ?>
                         <tr>
-                            <td scope="row">
+                            <th scope="row">
                                 <div>
                                     <?= $employee['IdEmployee'] ?>
                                 </div>
@@ -119,7 +116,7 @@
                                         <?= $employee['IdEmployee'] ?>
                                     </label>
                                      -->
-                            </td>
+                            </th>
                             <td>
                                 <div><?= $employee['Name'] ?> </div>
                             </td>

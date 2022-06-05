@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mufflin | Employees</title>
+    <title>Mufflin | Employees - Edit employee</title>
 
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
@@ -92,8 +92,10 @@
                     <span class="input-group-text" id="inputGroup-sizing-default">Job</span>
                     <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" name="Job" value="<?php echo isset($_GET['id']) ? $row['Job'] : '' ?>" required>
                 </div>
+                <a class="btn btn-outline-danger" type="button" href="delete.php?id=<?= $row['IdEmployee'] ?>"><i class="bi bi-trash-fill"></i></a>
             </div>
         </form>
+
     </main>
 
     <?php
