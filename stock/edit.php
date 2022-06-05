@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mufflin | Employees - Edit employee</title>
+    <title>Mufflin | Stock - Edit product</title>
 
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
@@ -28,7 +28,8 @@
 
 <?php
 if (isset($_GET['id'])) {
-    $stmt = $pdo->prepare('SELECT * FROM TbEmployees WHERE IdEmployee = :id');
+    /** @noinspection PhpUndefinedVariableInspection */
+    $stmt = $pdo->prepare('SELECT * FROM TbProducts WHERE IdProduct = :id');
     $stmt->execute(['id' => $_GET['id']]);
 
     $row = $stmt->fetch();
@@ -51,10 +52,10 @@ if (isset($_GET['id'])) {
                     <a class="nav-link " aria-current="page" href="../dashboard"><i class="bi bi-window"></i> Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="../employees"><i class="bi bi-person"></i> Employees</a>
+                    <a class="nav-link " href="../employees"><i class="bi bi-person"></i> Employees</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../stock"><i class="bi bi-box-seam"></i> Stock</a>
+                    <a class="nav-link active" href="../stock"><i class="bi bi-box-seam"></i> Stock</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="../sales"><i class="bi bi-cash-stack"></i> Sales</a>
@@ -63,10 +64,11 @@ if (isset($_GET['id'])) {
         </div>
     </div>
 </nav>
-
+<!-- /// NAVBAR -->
 
 <main class="Container mt-5">
 
+    <!-- BUTTONS -->
     <form action="" method="POST">
         <div class="container">
             <div class="row row-cols-1">
@@ -76,40 +78,47 @@ if (isset($_GET['id'])) {
                 </div>
             </div>
         </div>
+        <!-- /// BUTTONS -->
 
-
+        <!-- FORM -->
         <div class="container mt-5">
             <div class="row">
                 <div class="input-group mb-3">
-                    <span class="input-group-text">First and last name</span>
-                    <input type="text" aria-label="First name" class="form-control" name="EmployeeName"
-                           value="<?php echo isset($_GET['id']) ? $row['EmployeeName'] : '' ?>" required>
-                    <input type="text" aria-label="Last name" class="form-control" name="Surname"
-                           value="<?php echo isset($_GET['id']) ? $row['Surname'] : '' ?>" required>
+                    <span class="input-group-text">Name</span>
+                    <input type="text" aria-label="First name" class="form-control" name="ProductName"
+                           value="<?php echo isset($_GET['id']) ? $row['ProductName'] : '' ?>" required>
                 </div>
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">E-Mail</span>
-                <input type="text" class="form-control" aria-label="Sizing example input"
-                       aria-describedby="inputGroup-sizing-default" name="Mail"
-                       value="<?php echo isset($_GET['id']) ? $row['Mail'] : '' ?>" required>
+                <span class="input-group-text" id="inputGroup-sizing-default">Description</span>
+                <textarea class="form-control" name="Description"
+                          required><?php echo isset($_GET['id']) ? $row['Description'] : '' ?></textarea>
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Birth Date</span>
-                <input type="date" class="form-control" aria-label="Sizing example input"
-                       aria-describedby="inputGroup-sizing-default" name="BirthDate"
-                       value="<?php echo isset($_GET['id']) ? $row['BirthDate'] : '' ?>">
+                <span class="input-group-text" id="inputGroup-sizing-default">Price</span>
+                <input type="number" class="form-control" name="Price"
+                       value="<?php echo isset($_GET['id']) ? $row['Price'] : '' ?>">
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Job</span>
-                <input type="text" class="form-control" aria-label="Sizing example input"
-                       aria-describedby="inputGroup-sizing-default" name="Job"
-                       value="<?php echo isset($_GET['id']) ? $row['Job'] : '' ?>" required>
+                <span class="input-group-text" id="inputGroup-sizing-default">Category</span>
+                <select name="Category" id="Category" class="form-select input-group">
+                    <option value="Paper" <?php echo (isset($_GET['id']) && $row['Category'] == 'Paper') ? 'selected' : '' ?>>
+                        Paper
+                    </option>
+                    <option value="Electronics" <?php echo (isset($_GET['id']) && $row['Category'] == 'Electronics') ? 'selected' : '' ?>>
+                        Electronics
+                    </option>
+                    <option value="Stationery" <?php echo (isset($_GET['id']) && $row['Category'] == 'Stationery') ? 'selected' : '' ?>>
+                        Stationery
+                    </option>
+                </select>
             </div>
-            <a class="btn btn-outline-danger" type="button" href="delete.php?id=<?= $row['IdEmployee'] ?>"><i
+            <a class="btn btn-outline-danger" type="button" href="delete.php?id=<?= $row['IdProduct'] ?>"><i
                         class="bi bi-trash-fill"></i></a>
         </div>
     </form>
+
+    <!-- /// FORM -->
 
 </main>
 
@@ -118,28 +127,24 @@ if (isset($_GET['id'])) {
 if (isset($_POST) && !empty($_POST)) {
 
     if (isset($_GET['id'])) {
-        $stmt = $pdo->prepare("UPDATE TbEmployees SET  EmployeeName = :EmployeeName, Surname = :Surname, Mail = :Mail, BirthDate = :BirthDate, Job = :Job WHERE IdEmployee = :id");
+        $stmt = $pdo->prepare("UPDATE TbProducts SET  ProductName = :ProductName, Description = :Description, Price = :Price, Category = :Category WHERE IdProduct = :id");
         $stmt->execute([
-            'EmployeeName' => $_POST['EmployeeName'],
-            'Surname' => $_POST['Surname'],
-            'BirthDate' => $_POST['BirthDate'],
-            'Mail' => $_POST['Mail'],
-            'Job' => $_POST['Job'],
+            'ProductName' => $_POST['ProductName'],
+            'Description' => $_POST['Description'],
+            'Category' => $_POST['Category'],
+            'Price' => $_POST['Price'],
             'id' => $_GET['id']
         ]);
     } else {
-        $stmt = $pdo->prepare("INSERT INTO TbEmployees (EmployeeName, Surname, Mail, BirthDate, Job)
-            VALUES (:EmployeeName, :Surname, :Mail, :BirthDate, :Job)");
+        $stmt = $pdo->prepare("INSERT INTO TbProducts (ProductName, Description, Price, Category)
+            VALUES (:ProductName, :Description, :Price, :Category)");
         $stmt->execute([
-            'EmployeeName' => $_POST['EmployeeName'],
-            'Surname' => $_POST['Surname'],
-            'BirthDate' => $_POST['BirthDate'],
-            'Mail' => $_POST['Mail'],
-            'Job' => $_POST['Job']
+            'ProductName' => $_POST['ProductName'],
+            'Description' => $_POST['Description'],
+            'Price' => $_POST['Price'],
+            'Category' => $_POST['Category']
         ]);
     }
-
-
     echo("<script>location.href = 'index.php';</script>");
 }
 ?>
@@ -151,7 +156,6 @@ if (isset($_POST) && !empty($_POST)) {
         $("#ToTopBtn").load("source/ToTopBtn.html");
     });
 </script>
-
 
 </body>
 
