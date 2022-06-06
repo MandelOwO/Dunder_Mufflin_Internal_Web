@@ -150,7 +150,16 @@ $products = $stmt->fetchAll();
                        value="<?php echo isset($_GET['id']) ? $sales['Discount'] : '' ?>">
             </div>
 
-
+            <div class="input-group mb-3">
+                <?php if (isset($_GET['id'])) : ?>
+                    <p>Price:
+                        <?php
+                        $price = $price = $sales['Price'] * $sales['Count'] * (100 - $sales['Discount']) / 100;
+                        echo $price;
+                        ?>
+                    </p>
+                <?php endif; ?>
+            </div>
         </div>
     </form>
 

@@ -140,7 +140,7 @@ foreach ($sales as $key => $sale) {
                     <th class="table-tools">
                         <div class="input-group ">
                             <a class="btn btn-outline-secondary" type="button"
-                               href="edit.php?id=<?= $sale['IdProduct'] ?>"><i class="bi bi-wrench"></i></a>
+                               href="edit.php?id=<?= $sale['IdSale'] ?>"><i class="bi bi-wrench"></i></a>
                         </div>
                     </th>
                 </tr>
