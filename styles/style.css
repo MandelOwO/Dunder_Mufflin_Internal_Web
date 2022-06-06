@@ -31,12 +31,26 @@ td a {
     min-width: 100px;
 }
 
-tbody td>div{
+tbody td > div {
     margin-top: 0.3rem;
-   /* margin-left: 1rem;*/  
+    /* margin-left: 1rem;*/
 }
 
 .btn-delete:hover {
     background-color: rgb(255, 47, 47);
 }
 
+/*CAROUSEL*/
+.carousel-item {
+    background-color: #212529;
+    height: 25vh;
+}
+
+.carousel-content {
+    text-align: center;
+    color: white;
+}
+
+.carousel-content > h2 {
+    font-weight: bold;
+}
