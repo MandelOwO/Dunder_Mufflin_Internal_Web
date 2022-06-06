@@ -36,8 +36,9 @@ if (isset($_GET['search'])) {
 $stmt = $pdo->prepare('SELECT * FROM TbSales
                                 INNER JOIN TbProducts on TbSales.ProductId = TbProducts.IdProduct
                                 INNER JOIN TbEmployees on TbSales.EmployeeId = TbEmployees.IdEmployee
-                                WHERE ProductName like "%" :srch or IdSale like "%" :srch or EmployeeName like "%" :srch or  like "%" :srch)');
-$stmt->execute(/*['srch' => $search]*/);
+                                WHERE ProductName like "%" :srch or IdSale like "%" :srch or EmployeeName like "%" :srch or Surname like "%" :srch
+                                ORDER BY IdSale DESC');
+$stmt->execute(['srch' => $search]);
 
 $sales = $stmt->fetchAll();
 
@@ -121,7 +122,7 @@ foreach ($sales as $key => $sale) {
                         <div><?= $sale['IdSale'] ?> </div>
                     </td>
                     <td>
-                        <div><?= $sale['EmployeeName'] ?> </div>
+                        <div><?= $sale['EmployeeName'] ?> <?= $sale['Surname'] ?>  </div>
                     </td>
                     <td>
                         <div><?= $sale['ProductName'] ?></div>
@@ -140,8 +141,6 @@ foreach ($sales as $key => $sale) {
                         <div class="input-group ">
                             <a class="btn btn-outline-secondary" type="button"
                                href="edit.php?id=<?= $sale['IdProduct'] ?>"><i class="bi bi-wrench"></i></a>
-
-
                         </div>
                     </th>
                 </tr>

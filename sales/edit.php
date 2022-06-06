@@ -24,7 +24,7 @@
 </head>
 
 <body>
-/** @noinspection SqlNoDataSourceInspection */<?php require '../source/db.php' ?>
+<?php require '../source/db.php' ?>
 
 <?php
 if (isset($_GET['id'])) {
@@ -36,8 +36,16 @@ if (isset($_GET['id'])) {
                                 WHERE IdSale = :id');
     $stmt->execute(['id' => $_GET['id']]);
 
-    $row = $stmt->fetch();
+    $sales = $stmt->fetch();
 }
+
+$stmt = $pdo->prepare('SELECT * FROM TbEmployees WHERE DeletedAt IS NULL');
+$stmt->execute();
+$employees = $stmt->fetchAll();
+
+$stmt = $pdo->prepare('SELECT * FROM TbProducts WHERE DeletedAt IS NULL');
+$stmt->execute();
+$products = $stmt->fetchAll();
 ?>
 
 
@@ -88,19 +96,60 @@ if (isset($_GET['id'])) {
         <div class="container mt-5">
             <div class="input-group mb-3">
                 <span class="input-group-text" id="inputGroup-sizing-default">Seller</span>
-
-                <select name="Category" id="Category" class="form-select input-group">
+                <select name="Employee" id="Employee" class="form-select input-group">
                     <?php
-                    foreach ($row as $key => $sale) { ?>
-                        <option value="p<?= $sale['IdEmployee'] ?>" <?php echo (isset($_GET['id']) && $row['Category'] == 'Paper') ? 'selected' : '' ?>>
-                            <?= ?>
+                    foreach ($employees as $key => $employee) { ?>
+                        <option value="<?= $employee['IdEmployee'] ?>">
+                            <?= $employee['EmployeeName'] ?> <?= $employee['Surname'] ?>
                         </option>
                     <?php } ?>
-                    ?>
                 </select>
-
-
             </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Product</span>
+                <select name="Product" id="Product" class="form-select input-group">
+                    <?php
+                    foreach ($products as $key => $product) { ?>
+                        <option value="<?= $product['IdProduct'] ?>">
+                            <?= $product['ProductName'] ?>
+                        </option>
+                    <?php } ?>
+                </select>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Count</span>
+                <input type="number" class="form-control" name="Count"
+                       value="<?php echo isset($_GET['id']) ? $sales['Count'] : '' ?>" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Time</span>
+                <input type="datetime-local" class="form-control" name="Date"
+                       value="<?php echo isset($_GET['id']) ? $sales['Date'] : date("Y-m-d H:i:s") ?>">
+            </div>
+
+            <div class="input-group mb-3">
+                <label class="me-3">
+                    No discount
+                    <input type="radio" name="DiscountSelection" value="0" required checked>
+                </label>
+                <label class="me-3">
+                    10%
+                    <input type="radio" name="DiscountSelection" value="10" required>
+                </label>
+                <label class="me-3">
+                    Custom discount
+                    <input type="radio" name="DiscountSelection" value="-1" required>
+                </label>
+            </div>
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-default">Custom discount</span>
+                <input type="number" class="form-control" name="CustomDiscount"
+                       value="<?php echo isset($_GET['id']) ? $sales['Discount'] : '' ?>">
+            </div>
+
 
         </div>
     </form>
@@ -110,30 +159,39 @@ if (isset($_GET['id'])) {
 </main>
 
 <?php
-
 if (isset($_POST) && !empty($_POST)) {
+    if ($_POST['DiscountSelection'] == 0) {
+        $discount = 0;
+    } else if ($_POST['DiscountSelection'] == 10) {
+        $discount = 10;
+    } else if ($_POST['DiscountSelection'] == -1) {
+        $discount = $_POST['CustomDiscount'];
+    }
 
     if (isset($_GET['id'])) {
-        $stmt = $pdo->prepare("UPDATE TbProducts SET  ProductName = :ProductName, Description = :Description, Price = :Price, Category = :Category WHERE IdProduct = :id");
+        $stmt = $pdo->prepare("UPDATE TbSales SET EmployeeId = :EmployeeId, ProductId = :ProductId, Count = :Count, Discount = :Discount, Date = :Date WHERE IdSale = :id");
         $stmt->execute([
-            'ProductName' => $_POST['ProductName'],
-            'Description' => $_POST['Description'],
-            'Category' => $_POST['Category'],
-            'Price' => $_POST['Price'],
+            'EmployeeId' => $_POST['Employee'],
+            'ProductId' => $_POST['Product'],
+            'Discount' => $discount,
+            'Count' => $_POST['Count'],
+            'Date' => $_POST['Date'],
             'id' => $_GET['id']
         ]);
     } else {
-        $stmt = $pdo->prepare("INSERT INTO TbProducts (ProductName, Description, Price, Category)
-            VALUES (:ProductName, :Description, :Price, :Category)");
+        $stmt = $pdo->prepare("INSERT INTO TbSales (EmployeeId, ProductId, Discount, Count, Date)
+            VALUES (:EmployeeId, :ProductId, :Discount, :Count, :Date)");
         $stmt->execute([
-            'ProductName' => $_POST['ProductName'],
-            'Description' => $_POST['Description'],
-            'Price' => $_POST['Price'],
-            'Category' => $_POST['Category']
+            'EmployeeId' => $_POST['Employee'],
+            'ProductId' => $_POST['Product'],
+            'Discount' => $discount,
+            'Date' => $_POST['Date'],
+            'Count' => $_POST['Count']
         ]);
     }
     echo("<script>location.href = 'index.php';</script>");
 }
+
 ?>
 
 <!-- Go to top btn -->
