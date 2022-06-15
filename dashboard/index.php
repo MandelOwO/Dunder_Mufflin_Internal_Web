@@ -123,6 +123,8 @@ $SaleCount = $stmt->fetch();
             <span class="visually-hidden">Next</span>
         </button>
     </div>
+
+
 </main>
 </body>
 

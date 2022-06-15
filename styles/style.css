@@ -49,8 +49,14 @@ tbody td > div {
 .carousel-content {
     text-align: center;
     color: white;
+
 }
 
 .carousel-content > h2 {
     font-weight: bold;
+}
+
+.carousel-item {
+    min-height: 200px;
+    max-height: 200px;
 }

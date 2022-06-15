@@ -138,6 +138,7 @@ if (isset($_POST) && !empty($_POST)) {
     } else {
         $stmt = $pdo->prepare("INSERT INTO TbProducts (ProductName, Description, Price, Category)
             VALUES (:ProductName, :Description, :Price, :Category)");
+        var_dump($_POST);
         $stmt->execute([
             'ProductName' => $_POST['ProductName'],
             'Description' => $_POST['Description'],
@@ -145,7 +146,7 @@ if (isset($_POST) && !empty($_POST)) {
             'Category' => $_POST['Category']
         ]);
     }
-    echo("<script>location.href = 'index.php';</script>");
+    //echo("<script>location.href = 'index.php';</script>");
 }
 ?>
 
