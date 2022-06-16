@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mufflin | Stock</title>
+    <title>Mifflin | Stock</title>
 
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
@@ -44,7 +44,7 @@ $products = $stmt->fetchAll();
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar example">
     <div class="container">
-        <a class="navbar-brand" href="../dashboard">Mufflin System</a>
+        <a class="navbar-brand" href="../dashboard">Mifflin System</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
                 aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -115,8 +115,8 @@ $products = $stmt->fetchAll();
                     <td>
                         <div><?= $product['Category'] ?></div>
                     </td>
-                    <td>
-                        <div><?= $product['Price'] ?></div>
+                    <td class="Price">
+                        <div><?= number_format($product['Price'], 0, ',', ' ') ?> Kč</div>
                     </td>
                     <th class="table-tools">
                         <div class="input-group ">

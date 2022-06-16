@@ -3,7 +3,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mufflin | Sales</title>
+    <title>Mifflin | Sales</title>
 
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 
@@ -54,7 +54,7 @@ foreach ($sales as $key => $sale) {
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar example">
     <div class="container">
-        <a class="navbar-brand" href="../dashboard">Mufflin System</a>
+        <a class="navbar-brand" href="../dashboard">Mifflin System</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
                 aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -132,7 +132,8 @@ foreach ($sales as $key => $sale) {
                     </td>
                     <td>
                         <div><?php $price = $sale['Price'] * $sale['Count'] * (100 - $sale['Discount']) / 100;
-                            echo($price); ?></div>
+                            echo(number_format($price, 0, ',', ' ')); ?> Kč
+                        </div>
                     </td>
                     <td>
                         <div><?= $sale['Date'] ?></div>

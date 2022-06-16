@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mufflin | Home</title>
+    <title>Mifflin | Home</title>
 
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
@@ -44,15 +44,25 @@ $TotalTurnover = $stmt->fetch();
 
 $stmt = $pdo->prepare('SELECT 
                                 COUNT(IdSale) as Count
-                                FROM TbSales');
+                                FROM TbSales
+                                WHERE Date >= (NOW() - INTERVAL 14 DAY)');
 $stmt->execute();
 $SaleCount = $stmt->fetch();
+
+$stmt = $pdo->prepare('SELECT 
+                                COUNT(IdSale) as Count,
+                                Date
+                                FROM TbSales
+                                WHERE Date >= (NOW() - INTERVAL 7 DAY)
+                                GROUP BY DATE_FORMAT(Date, "%d-%m-%y")');
+$stmt->execute();
+$ChartData = $stmt->fetchAll();
 ?>
 
 <!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Eighth navbar example">
     <div class="container">
-        <a class="navbar-brand" href="../dashboard">Mufflin System</a>
+        <a class="navbar-brand" href="../dashboard">Mifflin System</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
                 aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -77,8 +87,12 @@ $SaleCount = $stmt->fetch();
         </div>
     </div>
 </nav>
+<!-- /// NAVBAR -->
+
 
 <main class="Container mt-5">
+
+    <!-- STATS -->
     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="true">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
@@ -101,7 +115,7 @@ $SaleCount = $stmt->fetch();
                 <div class="carousel-content mt-3">
                     <h1>Turnover</h1>
                     <h4>all time</h4>
-                    <h2><?= $TotalTurnover['Total'] ?></h2>
+                    <h2><?= number_format($TotalTurnover['Total'], 0, ',', ' ') ?> Kč</h2>
                 </div>
             </div>
             <div class="carousel-item">
@@ -123,8 +137,15 @@ $SaleCount = $stmt->fetch();
             <span class="visually-hidden">Next</span>
         </button>
     </div>
+    <!-- /// STATS -->
 
-
+    <!-- CHART -->
+    <div>
+        <?php foreach ($ChartData as $Key => $Column): ?>
+            <?php var_dump($Column); ?> <br>
+        <?php endforeach; ?>
+    </div>
+    <!-- /// CHART -->
 </main>
 </body>
 
