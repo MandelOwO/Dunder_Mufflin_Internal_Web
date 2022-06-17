@@ -51,7 +51,7 @@ $SaleCount = $stmt->fetch();
 
 $stmt = $pdo->prepare('SELECT 
                                 COUNT(IdSale) as Count,
-                                Date
+                                DATE_FORMAT( Date, "%d.%m") as Date
                                 FROM TbSales
                                 WHERE Date >= (NOW() - INTERVAL 7 DAY)
                                 GROUP BY DATE_FORMAT(Date, "%d-%m-%y")');
@@ -140,11 +140,32 @@ $ChartData = $stmt->fetchAll();
     <!-- /// STATS -->
 
     <!-- CHART -->
-    <div>
-        <?php foreach ($ChartData as $Key => $Column): ?>
-            <?php var_dump($Column); ?> <br>
-        <?php endforeach; ?>
-    </div>
+    <section class="container mt-5">
+        <div class="row">
+            <div class="col-lg-5">
+                <h1>Sales in last 7 days:</h1>
+                <div class="chart ">
+
+                    <?php foreach ($ChartData as $Key => $Column): ?>
+                        <div class="chartCol div-r-1" style="height: <?= $Column['Count']*10 ?>%"> <p> <?= $Column['Count'] ?></p></div>
+                        <div class="div-r-2"><?= $Column['Date']  ?></div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+
+            <div class="col">
+                <h1>News:</h1>
+                <div class="news">
+                    <p>We are <b>the best</b> paper company <b>worldwide!</b> </p> <hr>
+                    <p>Remember to keep <b>working hard</b> and stay <b>motivated!</b> </p> <hr>
+                    <p>New original clothing just dropped!</p>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
     <!-- /// CHART -->
 </main>
 </body>

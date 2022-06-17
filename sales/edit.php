@@ -99,7 +99,7 @@ $products = $stmt->fetchAll();
                 <select name="Employee" id="Employee" class="form-select input-group">
                     <?php
                     foreach ($employees as $key => $employee) { ?>
-                        <option value="<?= $employee['IdEmployee'] ?>">
+                        <option value="<?= $employee['IdEmployee'] ?>" <?php echo(isset($_GET['id']) && $sales['EmployeeId'] == $employee['IdEmployee'] ? 'Selected' : '' ); ?>>
                             <?= $employee['EmployeeName'] ?> <?= $employee['Surname'] ?>
                         </option>
                     <?php } ?>
@@ -111,7 +111,7 @@ $products = $stmt->fetchAll();
                 <select name="Product" id="Product" class="form-select input-group">
                     <?php
                     foreach ($products as $key => $product) { ?>
-                        <option value="<?= $product['IdProduct'] ?>">
+                        <option value="<?= $product['IdProduct'] ?>" <?php echo(isset($_GET['id']) && $sales['ProductId'] == $product['IdProduct'] ? 'Selected' : '' ); ?>>
                             <?= $product['ProductName'] ?>
                         </option>
                     <?php } ?>
@@ -130,9 +130,30 @@ $products = $stmt->fetchAll();
                        value="<?php echo isset($_GET['id']) ? $sales['Date'] : date("Y-m-d H:i:s") ?>">
             </div>
 
+            <div class="bottom ">
+                <div>
+                    <label for="Discount">
+                        <input type="checkbox" name="Discount" id="Discount" value="10" <?php echo(isset($_GET['id']) && $sales['Discount'] == 10 ? 'Checked':''); ?>>
+                        10% Discount
+                    </label>
+                </div>
+
+                <div class="">
+                    <?php if (isset($_GET['id'])) : ?>
+                        <p>Price:
+                            <?php
+                            $price = $price = $sales['Price'] * $sales['Count'] * (100 - $sales['Discount']) / 100;
+                            echo number_format($price, 0, ',', ' ') . ' Kč';
+                            ?>
+                        </p>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+<!--
             <div class="input-group mb-3">
                 <label class="me-3">
-                    No discount
+                    No Discount
                     <input type="radio" name="DiscountSelection" value="0" required checked>
                 </label>
                 <label class="me-3">
@@ -140,26 +161,17 @@ $products = $stmt->fetchAll();
                     <input type="radio" name="DiscountSelection" value="10" required>
                 </label>
                 <label class="me-3">
-                    Custom discount
+                    Custom Discount
                     <input type="radio" name="DiscountSelection" value="-1" required>
                 </label>
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text" id="inputGroup-sizing-default">Custom discount</span>
+                <span class="input-group-text" id="inputGroup-sizing-default">Custom Discount</span>
                 <input type="number" class="form-control" name="CustomDiscount"
                        value="<?php echo isset($_GET['id']) ? $sales['Discount'] : '' ?>">
             </div>
+-->
 
-            <div class="input-group mb-3">
-                <?php if (isset($_GET['id'])) : ?>
-                    <p>Price:
-                        <?php
-                        $price = $price = $sales['Price'] * $sales['Count'] * (100 - $sales['Discount']) / 100;
-                        echo number_format($price, 0, ',', ' ') . ' Kč';
-                        ?>
-                    </p>
-                <?php endif; ?>
-            </div>
         </div>
     </form>
 
@@ -169,20 +181,24 @@ $products = $stmt->fetchAll();
 
 <?php
 if (isset($_POST) && !empty($_POST)) {
+    /*
     if ($_POST['DiscountSelection'] == 0) {
-        $discount = 0;
+        $Discount = 0;
     } else if ($_POST['DiscountSelection'] == 10) {
-        $discount = 10;
+        $Discount = 10;
     } else if ($_POST['DiscountSelection'] == -1) {
-        $discount = $_POST['CustomDiscount'];
+        $Discount = $_POST['CustomDiscount'];
     }
-
+*/
+    if (!isset($_POST['Discount'])){
+        $_POST['Discount'] = 0;
+    }
     if (isset($_GET['id'])) {
         $stmt = $pdo->prepare("UPDATE TbSales SET EmployeeId = :EmployeeId, ProductId = :ProductId, Count = :Count, Discount = :Discount, Date = :Date WHERE IdSale = :id");
         $stmt->execute([
             'EmployeeId' => $_POST['Employee'],
             'ProductId' => $_POST['Product'],
-            'Discount' => $discount,
+            'Discount' => $_POST['Discount'],
             'Count' => $_POST['Count'],
             'Date' => $_POST['Date'],
             'id' => $_GET['id']
@@ -193,7 +209,7 @@ if (isset($_POST) && !empty($_POST)) {
         $stmt->execute([
             'EmployeeId' => $_POST['Employee'],
             'ProductId' => $_POST['Product'],
-            'Discount' => $discount,
+            'Discount' =>$_POST['Discount'],
             'Date' => $_POST['Date'],
             'Count' => $_POST['Count']
         ]);

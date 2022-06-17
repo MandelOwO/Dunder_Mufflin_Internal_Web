@@ -146,7 +146,7 @@ if (isset($_POST) && !empty($_POST)) {
             'Category' => $_POST['Category']
         ]);
     }
-    //echo("<script>location.href = 'index.php';</script>");
+    echo("<script>location.href = 'index.php';</script>");
 }
 ?>
 
